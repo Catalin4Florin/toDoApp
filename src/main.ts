@@ -8,6 +8,13 @@ import {
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 interface Todo {
   id: string;
@@ -15,45 +22,45 @@ interface Todo {
   completed: boolean;
 }
 
+const auth = getAuth();
+
+const emailInput = document.getElementById("email-input") as HTMLInputElement;
+const passwordInput = document.getElementById("password-input") as HTMLInputElement;
+const loginBtn = document.getElementById("login-btn") as HTMLButtonElement;
+const registerBtn = document.getElementById("register-btn") as HTMLButtonElement;
+const logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
+
 const todoInput = document.getElementById("todo-input") as HTMLInputElement;
 const todoForm = document.querySelector(".todo-form") as HTMLFormElement;
 const todoList = document.querySelector(".todo-list") as HTMLUListElement;
+const authSection = document.getElementById("auth-section") as HTMLDivElement;
+const todoSection = document.getElementById("todo-section") as HTMLDivElement;
 
-const todosCollection = collection(db, "todos");
+let unsubscribe: (() => void) | null = null;
 
-const addTodo = async (text: string) => {
-  try {
-    await addDoc(todosCollection, {
-      text,
-      completed: false,
-      createdAt: Date.now(),
-    });
-    todoInput.value = "";
-  } catch (error) {
-    console.error("Error adding todo:", error);
-  }
+const getTodosCollection = (uid: string) => collection(db, "users", uid, "todos");
+
+const addTodo = async (uid: string, text: string) => {
+  const todosCollection = getTodosCollection(uid);
+  await addDoc(todosCollection, {
+    text,
+    completed: false,
+    createdAt: Date.now(),
+  });
+  todoInput.value = "";
 };
 
-const removeTodo = async (id: string) => {
-  try {
-    await deleteDoc(doc(db, "todos", id));
-  } catch (error) {
-    console.error("Error deleting todo:", error);
-  }
+const removeTodo = async (uid: string, id: string) => {
+  await deleteDoc(doc(db, "users", uid, "todos", id));
 };
 
-const toggleComplete = async (id: string, currentState: boolean) => {
-  try {
-    const todoRef = doc(db, "todos", id);
-    await updateDoc(todoRef, { completed: !currentState });
-  } catch (error) {
-    console.error("Error updating todo:", error);
-  }
+const toggleComplete = async (uid: string, id: string, currentState: boolean) => {
+  const todoRef = doc(db, "users", uid, "todos", id);
+  await updateDoc(todoRef, { completed: !currentState });
 };
 
-const renderTodos = (todos: Todo[]) => {
+const renderTodos = (uid: string, todos: Todo[]) => {
   todoList.innerHTML = "";
-
   todos.forEach((todo) => {
     const li = document.createElement("li");
     li.className = "todo-item";
@@ -67,31 +74,68 @@ const renderTodos = (todos: Todo[]) => {
 
     const completeButton = li.querySelector(".complete-btn") as HTMLButtonElement;
     completeButton.addEventListener("click", () =>
-      toggleComplete(todo.id, todo.completed)
+      toggleComplete(uid, todo.id, todo.completed)
     );
 
     const removeButton = li.querySelector(".remove-btn") as HTMLButtonElement;
-    removeButton.addEventListener("click", () => removeTodo(todo.id));
+    removeButton.addEventListener("click", () => removeTodo(uid, todo.id));
 
     todoList.appendChild(li);
   });
 };
 
-onSnapshot(todosCollection, (snapshot) => {
-  const todos: Todo[] = [];
-  snapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    todos.push({
-      id: docSnap.id,
-      text: data.text,
-      completed: data.completed,
+const subscribeToTodos = (uid: string) => {
+  if (unsubscribe) unsubscribe();
+  const todosCollection = getTodosCollection(uid);
+  unsubscribe = onSnapshot(todosCollection, (snapshot) => {
+    const todos: Todo[] = [];
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      todos.push({
+        id: docSnap.id,
+        text: data.text,
+        completed: data.completed,
+      });
     });
+    renderTodos(uid, todos);
   });
-  renderTodos(todos);
+};
+
+loginBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  if (!email || !password) return;
+  await signInWithEmailAndPassword(auth, email, password);
+});
+
+registerBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  if (!email || !password) return;
+  await createUserWithEmailAndPassword(auth, email, password);
+});
+
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
 });
 
 todoForm.addEventListener("submit", (event: Event) => {
   event.preventDefault();
+  const user = auth.currentUser;
+  if (!user) return;
   const text = todoInput.value.trim();
-  if (text !== "") addTodo(text);
+  if (text !== "") addTodo(user.uid, text);
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    authSection.style.display = "none";
+    todoSection.style.display = "block";
+    subscribeToTodos(user.uid);
+  } else {
+    authSection.style.display = "block";
+    todoSection.style.display = "none";
+    todoList.innerHTML = "";
+    if (unsubscribe) unsubscribe();
+  }
 });
