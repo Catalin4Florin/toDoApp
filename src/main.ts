@@ -29,6 +29,12 @@ const passwordInput = document.getElementById("password-input") as HTMLInputElem
 const loginBtn = document.getElementById("login-btn") as HTMLButtonElement;
 const registerBtn = document.getElementById("register-btn") as HTMLButtonElement;
 const logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
+const errorDiv = document.createElement("div");
+
+errorDiv.style.color = "red";
+errorDiv.style.fontSize = "0.9em";
+errorDiv.style.marginTop = "8px";
+emailInput.insertAdjacentElement("afterend", errorDiv);
 
 const todoInput = document.getElementById("todo-input") as HTMLInputElement;
 const todoForm = document.querySelector(".todo-form") as HTMLFormElement;
@@ -104,15 +110,37 @@ const subscribeToTodos = (uid: string) => {
 loginBtn.addEventListener("click", async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
+  errorDiv.textContent = "";
   if (!email || !password) return;
-  await signInWithEmailAndPassword(auth, email, password);
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error: any) {
+    if (error.code === "auth/user-not-found") {
+      errorDiv.textContent = "No account found with that email. Please register first.";
+    } else if (error.code === "auth/wrong-password") {
+      errorDiv.textContent = "Incorrect password.";
+    } else {
+      errorDiv.textContent = "Login failed. Please register first.";
+    }
+  }
 });
 
 registerBtn.addEventListener("click", async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
+  errorDiv.textContent = "";
   if (!email || !password) return;
-  await createUserWithEmailAndPassword(auth, email, password);
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+  } catch (error: any) {
+    if (error.code === "auth/email-already-in-use") {
+      errorDiv.textContent = "That email is already registered.";
+    } else if (error.code === "auth/weak-password") {
+      errorDiv.textContent = "Password should be at least 6 characters.";
+    } else {
+      errorDiv.textContent = "Registration failed. Please try again.";
+    }
+  }
 });
 
 logoutBtn.addEventListener("click", async () => {
