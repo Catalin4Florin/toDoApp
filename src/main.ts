@@ -1,11 +1,13 @@
 import "./style.css";
 import { todoForm, todoInput, errorMessage, colorPicker } from "./dom";
-import { addTodo, renderTodos, clearCompleted } from "./ui";
+import { addTodo } from "./ui";
+import { clearCompleted } from "./ui";
 
-// Initial UI
+// Initial render
+import { renderTodos } from "./ui";
 renderTodos();
 
-// Form Listener
+// Form event
 todoForm.addEventListener("submit", (event: Event) => {
   event.preventDefault();
   const text = todoInput.value.trim();
@@ -21,12 +23,11 @@ todoForm.addEventListener("submit", (event: Event) => {
   }
 });
 
-// Color Picker
-colorPicker?.addEventListener("input", (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  document.body.style.backgroundColor = target.value;
-});
-
-// Clear Completed Button
+// Clear completed button
 const clearBtn = document.getElementById("clear-completed") as HTMLButtonElement | null;
 clearBtn?.addEventListener("click", () => clearCompleted());
+
+// Background Color Picker
+colorPicker?.addEventListener("input", (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  document.body.style.backgrou

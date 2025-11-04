@@ -33,11 +33,6 @@ export function addTodo(text: string): void {
   renderTodos();
 }
 
-export function clearCompleted(): void {
-  setTodos(todos.filter(todo => !todo.completed));
-  renderTodos();
-}
-
 export function removeTodo(id: number): void {
   const filtered = todos.filter(todo => todo.id !== id);
   setTodos(filtered);
@@ -57,6 +52,11 @@ export function toggleCompleted(id: number): void {
   const todo = findTodo(id);
   if (!todo) return;
   todo.completed = !todo.completed;
+  renderTodos();
+}
+
+export function clearCompleted(): void {
+  setTodos(todos.filter(todo => !todo.completed));
   renderTodos();
 }
 
