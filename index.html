@@ -11,21 +11,21 @@
       <div class="container">
         <h1>Todo App</h1>
 
-        <div id="auth-section">
-          <input type="email" id="email-input" placeholder="Email" />
-          <input type="password" id="password-input" placeholder="Password" />
-          <button id="login-btn">Login</button>
-          <button id="register-btn">Register</button>
-        </div>
+        <!-- Error message for input validation -->
+        <p id="error-message">Please enter a valid todo item.</p>
 
-        <div id="todo-section" style="display:none;">
-          <button id="logout-btn" style="background:#555;margin-bottom:10px;">Logout</button>
-          <form class="todo-form">
-            <input type="text" id="todo-input" placeholder="Enter a new todo" />
-            <button type="submit">Add todo</button>
-          </form>
-          <ul class="todo-list"></ul>
-        </div>
+        <!-- Todo form -->
+        <form class="todo-form">
+          <input type="text" id="todo-input" placeholder="Enter a new todo" />
+          <button type="submit">Add todo</button>
+        </form>
+
+        <!-- Todo List -->
+        <ul id="todo-list"></ul>
+
+        <!-- Color Picker -->
+        <label for="colorPicker">Background:</label>
+        <input type="color" id="colorPicker" />
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
