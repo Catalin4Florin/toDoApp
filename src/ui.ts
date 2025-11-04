@@ -33,6 +33,11 @@ export function addTodo(text: string): void {
   renderTodos();
 }
 
+export function clearCompleted(): void {
+  setTodos(todos.filter(todo => !todo.completed));
+  renderTodos();
+}
+
 export function removeTodo(id: number): void {
   const filtered = todos.filter(todo => todo.id !== id);
   setTodos(filtered);
@@ -58,6 +63,5 @@ export function toggleCompleted(id: number): void {
 function attachEventListeners(li: HTMLLIElement, id: number) {
   li.querySelector(".remove")?.addEventListener("click", () => removeTodo(id));
   li.querySelector(".edit")?.addEventListener("click", () => editTodo(id));
-
   li.querySelector(".todo-check")?.addEventListener("click", () => toggleCompleted(id));
 }

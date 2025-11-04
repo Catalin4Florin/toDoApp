@@ -1,6 +1,6 @@
 import "./style.css";
 import { todoForm, todoInput, errorMessage, colorPicker } from "./dom";
-import { addTodo, renderTodos } from "./ui";
+import { addTodo, renderTodos, clearCompleted } from "./ui";
 
 // Initial UI
 renderTodos();
@@ -26,3 +26,7 @@ colorPicker?.addEventListener("input", (event: Event) => {
   const target = event.target as HTMLInputElement;
   document.body.style.backgroundColor = target.value;
 });
+
+// Clear Completed Button
+const clearBtn = document.getElementById("clear-completed") as HTMLButtonElement | null;
+clearBtn?.addEventListener("click", () => clearCompleted());
