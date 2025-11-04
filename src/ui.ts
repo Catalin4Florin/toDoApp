@@ -55,6 +55,11 @@ export function toggleCompleted(id: number): void {
   renderTodos();
 }
 
+export function clearCompleted(): void {
+  setTodos(todos.filter(todo => !todo.completed));
+  renderTodos();
+}
+
 function attachEventListeners(li: HTMLLIElement, id: number) {
   li.querySelector(".remove")?.addEventListener("click", () => removeTodo(id));
   li.querySelector(".edit")?.addEventListener("click", () => editTodo(id));

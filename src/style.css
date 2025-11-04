@@ -97,3 +97,11 @@ h1 {
   margin-top: 5px;
   display: none;
 }
+
+#clear-completed {
+  width: 100%;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  color: #fff;
+}
