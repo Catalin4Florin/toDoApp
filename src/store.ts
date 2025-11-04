@@ -7,6 +7,10 @@ export let todos: Todo[] = loadTodos();
 export function addTodoItem(todo: Todo): void {
   todos.push(todo);
   saveTodos();
+export let todos: Todo[] = [];
+
+export function addTodoItem(todo: Todo): void {
+  todos.push(todo);
 }
 
 export function setTodos(next: Todo[]): void {

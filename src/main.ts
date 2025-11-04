@@ -7,6 +7,16 @@ import type { FilterStatus } from "./types";
 renderTodos();
 
 // Form Listener
+
+// Form Listener
+import { addTodo } from "./ui";
+import { clearCompleted } from "./ui";
+
+// Initial render
+import { renderTodos } from "./ui";
+renderTodos();
+
+// Form event
 todoForm.addEventListener("submit", (event: Event) => {
   event.preventDefault();
   const text = todoInput.value.trim();
@@ -37,3 +47,5 @@ const filterSelect = document.getElementById("filter") as HTMLSelectElement | nu
 filterSelect?.addEventListener("change", () =>
   setFilter(filterSelect.value as FilterStatus)
 );
+
+

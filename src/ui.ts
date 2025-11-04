@@ -15,6 +15,9 @@ function getFilteredTodos(): Todo[] {
   return todos; // "all"
 }
 
+import type { Todo } from "./types";
+import { todoList } from "./dom";
+
 export function renderTodos(): void {
   if (!todoList) return;
   todoList.innerHTML = "";
@@ -22,6 +25,7 @@ export function renderTodos(): void {
   const visibleTodos = getFilteredTodos();
 
   visibleTodos.forEach((todo: Todo) => {
+  todos.forEach((todo: Todo) => {
     const li = document.createElement("li");
     li.className = "todo-item";
     if (todo.completed) li.classList.add("completed");
@@ -72,6 +76,11 @@ export function toggleCompleted(id: number): void {
   const todo = findTodo(id);
   if (!todo) return;
   todo.completed = !todo.completed;
+  renderTodos();
+}
+
+export function clearCompleted(): void {
+  setTodos(todos.filter(todo => !todo.completed));
   renderTodos();
 }
 
