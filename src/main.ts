@@ -7,6 +7,8 @@ import type { FilterStatus } from "./types";
 renderTodos();
 
 // Form Listener
+
+// Form Listener
 import { addTodo } from "./ui";
 import { clearCompleted } from "./ui";
 
@@ -45,11 +47,5 @@ const filterSelect = document.getElementById("filter") as HTMLSelectElement | nu
 filterSelect?.addEventListener("change", () =>
   setFilter(filterSelect.value as FilterStatus)
 );
-// Clear completed button
-const clearBtn = document.getElementById("clear-completed") as HTMLButtonElement | null;
-clearBtn?.addEventListener("click", () => clearCompleted());
 
-// Background Color Picker
-colorPicker?.addEventListener("input", (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  document.body.style.backgrou
+
