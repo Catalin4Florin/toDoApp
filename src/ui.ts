@@ -3,15 +3,21 @@ import type { Todo } from "./types";
 import { todoList } from "./dom";
 
 export function renderTodos(): void {
+  if (!todoList) return;
   todoList.innerHTML = "";
+
   todos.forEach((todo: Todo) => {
     const li = document.createElement("li");
     li.className = "todo-item";
+    if (todo.completed) li.classList.add("completed");
+
     li.innerHTML = `
-      <span>${todo.text}</span>
+      <input type="checkbox" class="todo-check" ${todo.completed ? "checked" : ""} />
+      <span class="todo-text">${todo.text}</span>
       <button class="remove">Remove</button>
       <button class="edit">Edit</button>
     `;
+
     attachEventListeners(li, todo.id);
     todoList.appendChild(li);
   });
@@ -42,7 +48,16 @@ export function editTodo(id: number): void {
   renderTodos();
 }
 
+export function toggleCompleted(id: number): void {
+  const todo = findTodo(id);
+  if (!todo) return;
+  todo.completed = !todo.completed;
+  renderTodos();
+}
+
 function attachEventListeners(li: HTMLLIElement, id: number) {
   li.querySelector(".remove")?.addEventListener("click", () => removeTodo(id));
   li.querySelector(".edit")?.addEventListener("click", () => editTodo(id));
+
+  li.querySelector(".todo-check")?.addEventListener("click", () => toggleCompleted(id));
 }
