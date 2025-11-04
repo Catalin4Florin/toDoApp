@@ -1,12 +1,27 @@
 import { todos, setTodos, addTodoItem, findTodo } from "./store";
-import type { Todo } from "./types";
+import type { Todo, FilterStatus } from "./types";
 import { todoList } from "./dom";
+
+let currentFilter: FilterStatus = "all";
+
+export function setFilter(filter: FilterStatus): void {
+  currentFilter = filter;
+  renderTodos();
+}
+
+function getFilteredTodos(): Todo[] {
+  if (currentFilter === "active") return todos.filter(t => !t.completed);
+  if (currentFilter === "completed") return todos.filter(t => t.completed);
+  return todos; // "all"
+}
 
 export function renderTodos(): void {
   if (!todoList) return;
   todoList.innerHTML = "";
 
-  todos.forEach((todo: Todo) => {
+  const visibleTodos = getFilteredTodos();
+
+  visibleTodos.forEach((todo: Todo) => {
     const li = document.createElement("li");
     li.className = "todo-item";
     if (todo.completed) li.classList.add("completed");
