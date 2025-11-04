@@ -20,6 +20,32 @@
           <button type="submit">Add todo</button>
         </form>
 
+        <!-- Filter Dropdown -->
+        <label for="filter">Filter:</label>
+        <select id="filter">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+
+        <!-- Todo List -->
+        <ul id="todo-list"></ul>
+
+        <!-- Clear Completed Button -->
+        <button id="clear-completed" style="background:#555;margin-top:10px;">
+          Clear Completed
+        </button>
+
+        <!-- Color Picker -->
+        <label for="colorPicker">Background:</label>
+        <input type="color" id="colorPicker" />
+
+        <!-- Todo form -->
+        <form class="todo-form">
+          <input type="text" id="todo-input" placeholder="Enter a new todo" />
+          <button type="submit">Add todo</button>
+        </form>
+
         <!-- Todo List -->
         <ul id="todo-list"></ul>
 

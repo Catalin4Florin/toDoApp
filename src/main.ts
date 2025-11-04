@@ -1,5 +1,12 @@
 import "./style.css";
 import { todoForm, todoInput, errorMessage, colorPicker } from "./dom";
+import { addTodo, renderTodos, clearCompleted, setFilter } from "./ui";
+import type { FilterStatus } from "./types";
+
+// Initial UI
+renderTodos();
+
+// Form Listener
 import { addTodo } from "./ui";
 import { clearCompleted } from "./ui";
 
@@ -23,6 +30,21 @@ todoForm.addEventListener("submit", (event: Event) => {
   }
 });
 
+// Color Picker
+colorPicker?.addEventListener("input", (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  document.body.style.backgroundColor = target.value;
+});
+
+// Clear Completed Button
+const clearBtn = document.getElementById("clear-completed") as HTMLButtonElement | null;
+clearBtn?.addEventListener("click", () => clearCompleted());
+
+// Filter Dropdown
+const filterSelect = document.getElementById("filter") as HTMLSelectElement | null;
+filterSelect?.addEventListener("change", () =>
+  setFilter(filterSelect.value as FilterStatus)
+);
 // Clear completed button
 const clearBtn = document.getElementById("clear-completed") as HTMLButtonElement | null;
 clearBtn?.addEventListener("click", () => clearCompleted());
