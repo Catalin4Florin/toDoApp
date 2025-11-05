@@ -12,11 +12,8 @@ export function setFilter(filter: FilterStatus): void {
 function getFilteredTodos(): Todo[] {
   if (currentFilter === "active") return todos.filter(t => !t.completed);
   if (currentFilter === "completed") return todos.filter(t => t.completed);
-  return todos; // "all"
+  return todos;
 }
-
-import type { Todo } from "./types";
-import { todoList } from "./dom";
 
 export function renderTodos(): void {
   if (!todoList) return;
@@ -25,7 +22,6 @@ export function renderTodos(): void {
   const visibleTodos = getFilteredTodos();
 
   visibleTodos.forEach((todo: Todo) => {
-  todos.forEach((todo: Todo) => {
     const li = document.createElement("li");
     li.className = "todo-item";
     if (todo.completed) li.classList.add("completed");
@@ -52,13 +48,8 @@ export function addTodo(text: string): void {
   renderTodos();
 }
 
-export function clearCompleted(): void {
-  setTodos(todos.filter(todo => !todo.completed));
-  renderTodos();
-}
-
 export function removeTodo(id: number): void {
-  const filtered = todos.filter(todo => todo.id !== id);
+  const filtered = todos.filter((todo: Todo) => todo.id !== id);
   setTodos(filtered);
   renderTodos();
 }
@@ -80,7 +71,7 @@ export function toggleCompleted(id: number): void {
 }
 
 export function clearCompleted(): void {
-  setTodos(todos.filter(todo => !todo.completed));
+  setTodos(todos.filter((todo: Todo) => !todo.completed));
   renderTodos();
 }
 
