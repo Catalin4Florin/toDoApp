@@ -4,7 +4,7 @@ import "./style.css";
 import { todoForm, todoInput, errorMessage, colorPicker } from "./dom";
 
 // Todo actions / UI interactions
-import { addTodo, renderTodos, clearCompleted, setFilter, toggleCompleted } from "./ui";
+import { addTodo, renderTodos, clearCompleted, setFilter } from "./ui";
 import type { FilterStatus } from "./types";
 
 //  Initial render
