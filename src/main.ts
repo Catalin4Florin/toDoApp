@@ -4,7 +4,7 @@ import "./style.css";
 import { todoForm, todoInput, errorMessage, colorPicker } from "./dom";
 
 // Todo actions / UI interactions
-import { addTodoItem, renderTodos, clearCompleted, setFilter, toggleCompleted } from "./ui";
+import { addTodo, renderTodos, clearCompleted, setFilter, toggleCompleted } from "./ui";
 import type { FilterStatus } from "./types";
 
 //  Initial render
@@ -18,7 +18,7 @@ todoForm.addEventListener("submit", (event: Event) => {
   if (text !== "") {
     todoInput.classList.remove("input-error");
     if (errorMessage) errorMessage.style.display = "none";
-    addTodoItem(text);
+    addTodo(text);
     todoInput.value = "";
   } else {
     todoInput.classList.add("input-error");
