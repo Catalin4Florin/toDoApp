@@ -9,12 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@vitest/ui": "^4.0.7",
     "jsdom": "^26.1.0",
     "typescript": "~5.8.3",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "vitest": "^4.0.7"
   },
   "dependencies": {
-    "firebase": "^12.4.0",
-    "vitest": "^3.2.4"
+    "firebase": "^12.4.0"
   }
 }
