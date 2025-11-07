@@ -105,3 +105,12 @@ h1 {
   border-radius: 3px;
   color: #fff;
 }
+
+.todo-priority {
+  font-size: 0.9rem;
+  margin-left: 8px;
+  font-weight: bold;
+}
+.todo-priority.low { color: green; }
+.todo-priority.medium { color: orange; }
+.todo-priority.high { color: red; }
