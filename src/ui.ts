@@ -17,7 +17,7 @@ function getFilteredTodos(): Todo[] {
 
 export function renderTodos(): void {
   if (!todoList) return;
-  todoList.innerHTML = "";
+  todoList.innerHTML = "";  
 
   const visibleTodos = getFilteredTodos();
 
@@ -31,8 +31,7 @@ export function renderTodos(): void {
       <span class="todo-text">${todo.text}</span>
       <span class="todo-priority ${todo.priority.toLowerCase()}">${todo.priority}</span>
       <button class="remove">Remove</button>
-      <button class="edit">Edit</button>
-    `;
+      <button class="edit">Edit</button>`;
 
     attachEventListeners(li, todo.id);
     todoList.appendChild(li);
