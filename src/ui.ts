@@ -29,6 +29,7 @@ export function renderTodos(): void {
     li.innerHTML = `
       <input type="checkbox" class="todo-check" ${todo.completed ? "checked" : ""} />
       <span class="todo-text">${todo.text}</span>
+      <span class="todo-priority ${todo.priority.toLowerCase()}">${todo.priority}</span>
       <button class="remove">Remove</button>
       <button class="edit">Edit</button>
     `;
@@ -39,11 +40,16 @@ export function renderTodos(): void {
 }
 
 export function addTodo(text: string): void {
+  const prioritySelect = document.getElementById("priority-select") as HTMLSelectElement;
+  const priority = (["Low", "Medium", "High"].includes(prioritySelect?.value) ? prioritySelect.value : "Medium") as "Low" | "Medium" | "High";
+
   const newTodo: Todo = {
     id: Date.now(),
     text,
     completed: false,
+    priority, 
   };
+
   addTodoItem(newTodo);
   renderTodos();
 }
@@ -80,3 +86,11 @@ function attachEventListeners(li: HTMLLIElement, id: number) {
   li.querySelector(".edit")?.addEventListener("click", () => editTodo(id));
   li.querySelector(".todo-check")?.addEventListener("click", () => toggleCompleted(id));
 }
+
+const sortButton = document.getElementById("sort-priority") as HTMLButtonElement | null;
+sortButton?.addEventListener("click", () => {
+  const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+  const sorted = [...todos].sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
+  setTodos(sorted);
+  renderTodos();
+});
